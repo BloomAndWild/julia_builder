@@ -16,6 +16,12 @@ module Julia
       @columns ||= {}
     end
 
+    def self.inherited(subclass)
+      columns.each do |key, action|
+        subclass.column(key, action.action, &action.block)
+      end
+    end
+
     def build
       CSV.generate(csv_options) do |csv|
         csv << columns.keys
