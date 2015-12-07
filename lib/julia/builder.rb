@@ -19,10 +19,10 @@ module Julia
     def build
       CSV.generate(csv_options) do |csv|
         csv << columns.keys
-
-        collection.each do |record|
+        yield(csv) if block_given?
+        collection.each_with_index do |record, i|
           csv << columns.values.map do |action|
-            action.get_value(record)
+            action.get_value(record, i)
           end
         end
       end

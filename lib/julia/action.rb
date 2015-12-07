@@ -8,8 +8,8 @@ module Julia
       @block  = block
     end
 
-    def get_value(record)
-      return block.call(record) if block
+    def get_value(record, sequence = 0)
+      return block.call(record, sequence) if block
       return record.instance_exec(&action) if action.is_a? Proc
 
       record.send [action, key].compact.first
