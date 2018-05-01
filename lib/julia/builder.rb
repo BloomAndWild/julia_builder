@@ -9,11 +9,11 @@ module Julia
     end
 
     def self.column(keyname, action = nil, &block)
-      if !self.model_class.nil? && self.model_class.respond_to?(:human_attribute_name)
-        translated_key = self.model_class&.human_attribute_name(keyname)
+      if model_class.respond_to?(:human_attribute_name)
+        translated_key = model_class.human_attribute_name(keyname)
       end
 
-      self.columns[translated_key || keyname] = Action.new(keyname, action, &block)
+      columns[translated_key || keyname] = Action.new(keyname, action, &block)
     end
 
     def self.columns
@@ -21,11 +21,8 @@ module Julia
     end
 
     def self.model_class
-      begin
-        self.name.demodulize.sub(/Csv$/, '').constantize
-      rescue NameError
-        nil
-      end
+      @model_class ||= name.demodulize.sub(/Csv$/, '').constantize
+    rescue NameError
     end
 
     def self.inherited(subclass)
