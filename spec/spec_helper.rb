@@ -6,4 +6,4 @@ require 'pry-byebug'
 
 require 'julia'
 
-CodeClimate::TestReporter.start
+SimpleCov.start CodeClimate::TestReporter.configuration.profile

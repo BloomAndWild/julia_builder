@@ -43,7 +43,7 @@ module Julia
             action.get_value(record, i)
           end
         end
-      end.force_encoding('utf-8')
+      end&.force_encoding('utf-8')
     end
 
     protected
