@@ -5,3 +5,4 @@ gemspec
 
 gem 'pry-byebug'
 gem "codeclimate-test-reporter", group: :test, require: nil
+gem 'activesupport', group: :test, require: nil
