@@ -24,10 +24,28 @@ RSpec.describe Julia::Builder do
     column 'Full name', -> { "#{ name.capitalize } #{ last_name.capitalize }"}
   end
 
+  class TestModel
+    def self.human_attribute_name attribute
+      'Human Name'
+    end
+  end
+
+  class TestModelCsv < described_class
+    column :name
+  end
+
   context 'with header name equals to value' do
     let(:subject){ Test1.new(query) }
 
     it { expect(subject.build).to eq "name\nsteven\n" }
+
+    context 'when model class responds to .human_attribute_name' do
+      let(:subject){ TestModelCsv.new(query) }
+
+      it 'uses the value from this for the header instead' do
+        expect(subject.build).to eq "Human Name\nsteven\n"
+      end
+    end
   end
 
   context 'with header different than the value' do

@@ -9,11 +9,20 @@ module Julia
     end
 
     def self.column(keyname, action = nil, &block)
-      self.columns[keyname] = Action.new(keyname, action, &block)
+      if model_class.respond_to?(:human_attribute_name)
+        translated_key = model_class.human_attribute_name(keyname)
+      end
+
+      columns[translated_key || keyname] = Action.new(keyname, action, &block)
     end
 
     def self.columns
       @columns ||= {}
+    end
+
+    def self.model_class
+      @model_class ||= name.demodulize.sub(/Csv$/, '').constantize
+    rescue NameError
     end
 
     def self.inherited(subclass)
@@ -31,7 +40,7 @@ module Julia
             action.get_value(record, i)
           end
         end
-      end.force_encoding('utf-8')
+      end&.force_encoding('utf-8')
     end
 
     protected
