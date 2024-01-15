@@ -32,7 +32,7 @@ module Julia
     end
 
     def build
-      CSV.generate(csv_options) do |csv|
+      CSV.generate(**csv_options) do |csv|
         csv << columns.keys
         yield(csv) if block_given?
         collection.each_with_index do |record, i|
