@@ -1,0 +1,24 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  test:
+    name: Tests with Ruby ${{ matrix.ruby }} Rails ${{ matrix.rails }} Active Admin ${{ matrix.activeadmin }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby:
+          - '3.1.4'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - name: Run tests
+        run: |
+          gem install bundler
+          bundle install
+          bundle exec rake spec
